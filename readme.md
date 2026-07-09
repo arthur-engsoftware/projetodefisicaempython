@@ -6,15 +6,15 @@ Projeto desenvolvido para a disciplina **Fisica para Ciencia da Computacao**.
 
 O codigo deste projeto esta disponivel no GitHub em:
 
-**https://github.com/arthur-engsoftware/projetodefisicaempython.git**
+**https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO**
 
 *(troque o link acima pelo link real do repositorio depois de criado)*
 
 Para baixar o projeto na sua maquina:
 
 ```bash
-git https://github.com/arthur-engsoftware/projetodefisicaempython.git
-cd projetodefisicaempython
+git clone https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git
+cd NOME_DO_REPOSITORIO
 ```
 
 ## Objetivo
@@ -35,20 +35,26 @@ Todo o codigo foi escrito usando apenas **funcoes** (sem classes, sem lambda, se
 
 ## Como instalar as bibliotecas
 
-### Windows
+Este projeto tem um arquivo `requirements.txt` com as bibliotecas necessarias. Assim, em vez de instalar uma por uma, basta rodar um unico comando.
 
-Abra o Prompt de Comando (cmd) ou o PowerShell e digite:
+Voce pode instalar as bibliotecas **direto no sistema** (mais simples) ou dentro de um **ambiente virtual (venv)** (mais organizado, recomendado se voce mexe com varios projetos Python). As duas formas estao explicadas abaixo.
 
-```
-pip install numpy matplotlib
-```
+### Opcao 1 - Instalar direto no sistema (mais simples)
 
-### Linux
+**Windows**
 
-Abra o terminal e digite:
+Abra o Prompt de Comando (cmd) ou o PowerShell, entre na pasta do projeto e digite:
 
 ```
-pip3 install numpy matplotlib
+pip install -r requirements.txt
+```
+
+**Linux**
+
+Abra o terminal, entre na pasta do projeto e digite:
+
+```
+pip3 install -r requirements.txt
 ```
 
 Caso o `pip3` nao esteja instalado, use antes:
@@ -57,6 +63,53 @@ Caso o `pip3` nao esteja instalado, use antes:
 sudo apt update
 sudo apt install python3-pip
 ```
+
+Em versoes mais novas do Ubuntu, o sistema pode bloquear a instalacao com o erro `externally-managed-environment`. Se isso acontecer, use:
+
+```
+pip3 install -r requirements.txt --break-system-packages
+```
+
+### Opcao 2 - Instalar dentro de um venv (ambiente virtual)
+
+Um **venv** e uma "caixa" isolada com sua propria copia do Python e das bibliotecas, separada do resto do sistema. Isso evita que as bibliotecas de um projeto entrem em conflito com as de outro.
+
+**1. Criar o venv** (so precisa fazer isso uma vez, dentro da pasta do projeto):
+
+```
+python3 -m venv venv
+```
+
+Isso cria uma pasta chamada `venv` com uma copia do Python dentro.
+
+**2. Ativar o venv** (precisa fazer isso toda vez que abrir um terminal novo):
+
+```
+source venv/bin/activate      # Linux/Mac
+venv\Scripts\activate          # Windows
+```
+
+Quando o venv estiver ativo, o prompt do terminal passa a mostrar `(venv)` no comeco da linha. Isso confirma que esta usando o Python de dentro da caixinha, e nao o do sistema.
+
+**3. Instalar as bibliotecas dentro do venv:**
+
+```
+pip install -r requirements.txt
+```
+
+**4. Rodar o programa normalmente:**
+
+```
+python3 projeto_vetores.py
+```
+
+**5. Quando terminar de usar, para sair do venv:**
+
+```
+deactivate
+```
+
+Se fechar o terminal e abrir de novo mais tarde, lembre-se de ativar o venv de novo (passo 2) antes de rodar o programa, ou o Python nao vai encontrar o numpy e o matplotlib instalados nele.
 
 ## Como executar
 
