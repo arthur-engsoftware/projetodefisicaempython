@@ -21,7 +21,11 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # necessario para graficos 3D
 
 
-
+# ----------------------------------------------------------------------
+# Variaveis globais usadas para guardar a ultima operacao feita.
+# Assim o menu "Visualizar operacao" consegue desenhar o que o
+# usuario acabou de calcular, sem precisar refazer tudo.
+# ----------------------------------------------------------------------
 ultima_operacao_tipo = None      # guarda o nome da operacao (ex: "soma")
 ultima_operacao_dimensao = None  # guarda se foi "2D" ou "3D"
 ultimo_vetor_a = None
@@ -30,8 +34,9 @@ ultimo_resultado = None
 ultimo_escalar = None
 
 
-
+# ----------------------------------------------------------------------
 # FUNCOES DE ENTRADA (LEITURA DE DADOS COM VALIDACAO)
+# ----------------------------------------------------------------------
 
 def ler_numero(mensagem):
     """
@@ -103,7 +108,9 @@ def escolher_dimensao():
         return "3D"
 
 
-
+# ----------------------------------------------------------------------
+# FUNCOES DE OPERACOES COM VETORES
+# ----------------------------------------------------------------------
 
 def somar_vetores(vetor_a, vetor_b):
     """Retorna a soma de dois vetores (numpy arrays de mesmo tamanho)."""
@@ -130,6 +137,9 @@ def produto_vetorial(vetor_a, vetor_b):
     return np.cross(vetor_a, vetor_b)
 
 
+# ----------------------------------------------------------------------
+# FUNCOES DE VISUALIZACAO GRAFICA (MATPLOTLIB)
+# ----------------------------------------------------------------------
 
 # Paleta de cores usada em todos os graficos, para ficar padronizado
 COR_A = "#e63946"          # vermelho

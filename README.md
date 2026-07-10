@@ -6,15 +6,13 @@ Projeto desenvolvido para a disciplina **Fisica para Ciencia da Computacao**.
 
 O codigo deste projeto esta disponivel no GitHub em:
 
-**https://github.com/arthur-engsoftware/projetodefisicaempython.git**
-
-*(troque o link acima pelo link real do repositorio depois de criado)*
+**https://github.com/arthur-engsoftware/projetodefisicaempython**
 
 Para baixar o projeto na sua maquina:
 
 ```bash
 git clone https://github.com/arthur-engsoftware/projetodefisicaempython.git
-cd NOME_DO_REPOSITORIO
+cd projetodefisicaempython
 ```
 
 ## Objetivo
