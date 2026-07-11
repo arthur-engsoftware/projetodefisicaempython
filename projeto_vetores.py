@@ -1,30 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-PROJETO 1 - VETORES
-Disciplina: Fisica para Ciencia da Computacao
-
-Este programa foi feito usando apenas funcoes (sem classes), para
-praticar logica de programacao em Python. Ele permite:
-- Converter unidades de medida (comprimento, massa, tempo, etc)
-- Criar vetores 2D e 3D
-- Fazer operacoes com vetores (soma, subtracao, produto escalar, etc)
-- Ver os vetores desenhados na tela usando o Matplotlib
-
-Para rodar:
-    python3 projeto_vetores.py
-"""
+# PROJETO 1 - VETORES
+# Fisica para Ciencia da Computacao
+# roda com: python3 projeto_vetores.py
 
 import sys
 
-# Tenta importar as bibliotecas necessarias. Se alguma nao estiver
-# instalada, mostra uma mensagem simples explicando o que fazer, em vez
-# de um erro tecnico (Traceback) dificil de entender.
+# se numpy/matplotlib nao estiver instalado, mostra um aviso mais
+# facil de entender em vez do traceback gigante do python
 try:
     import numpy as np
     import matplotlib.pyplot as plt
-    from mpl_toolkits.mplot3d import Axes3D  # necessario para graficos 3D
+    from mpl_toolkits.mplot3d import Axes3D  # precisa disso pro grafico 3D
 except ModuleNotFoundError as erro:
     print("=" * 60)
     print("ERRO: uma biblioteca necessaria nao esta instalada.")
@@ -43,29 +31,18 @@ except ModuleNotFoundError as erro:
     sys.exit(1)
 
 
-# ----------------------------------------------------------------------
-# Variaveis globais usadas para guardar a ultima operacao feita.
-# Assim o menu "Visualizar operacao" consegue desenhar o que o
-# usuario acabou de calcular, sem precisar refazer tudo.
-# ----------------------------------------------------------------------
-ultima_operacao_tipo = None      # guarda o nome da operacao (ex: "soma")
-ultima_operacao_dimensao = None  # guarda se foi "2D" ou "3D"
+# guarda a ultima operacao feita, pra opcao "visualizar operacao" saber
+# o que desenhar depois sem o usuario ter que digitar tudo de novo
+ultima_operacao_tipo = None
+ultima_operacao_dimensao = None
 ultimo_vetor_a = None
 ultimo_vetor_b = None
 ultimo_resultado = None
 ultimo_escalar = None
 
 
-# ----------------------------------------------------------------------
-# FUNCOES DE ENTRADA (LEITURA DE DADOS COM VALIDACAO)
-# ----------------------------------------------------------------------
-
 def ler_numero(mensagem):
-    """
-    Pede um numero para o usuario e so retorna quando o valor
-    digitado for valido (aceita numeros inteiros e reais, com
-    ponto ou virgula).
-    """
+    # aceita tanto ponto quanto virgula, tipo 3.5 ou 3,5
     while True:
         entrada = input(mensagem)
         entrada = entrada.strip().replace(",", ".")
@@ -77,9 +54,6 @@ def ler_numero(mensagem):
 
 
 def ler_opcao_inteira(mensagem, minimo, maximo):
-    """
-    Pede um numero inteiro dentro de um intervalo (usado para os menus).
-    """
     while True:
         entrada = input(mensagem)
         entrada = entrada.strip()
@@ -91,9 +65,6 @@ def ler_opcao_inteira(mensagem, minimo, maximo):
 
 
 def ler_vetor_2d():
-    """
-    Le um vetor 2D digitado pelo usuario e devolve como array numpy [x, y].
-    """
     print("\n--- Criando vetor 2D ---")
     x = ler_numero("Digite X: ")
     y = ler_numero("Digite Y: ")
@@ -103,9 +74,6 @@ def ler_vetor_2d():
 
 
 def ler_vetor_3d():
-    """
-    Le um vetor 3D digitado pelo usuario e devolve como array numpy [x, y, z].
-    """
     print("\n--- Criando vetor 3D ---")
     x = ler_numero("Digite X: ")
     y = ler_numero("Digite Y: ")
@@ -116,68 +84,48 @@ def ler_vetor_3d():
 
 
 def escolher_dimensao():
-    """
-    Pergunta ao usuario se ele quer trabalhar com vetores 2D ou 3D.
-    Retorna a string "2D" ou "3D".
-    """
     print("\nEscolha a dimensao do vetor:")
     print("1 - 2D")
     print("2 - 3D")
     opcao = ler_opcao_inteira("Opcao: ", 1, 2)
     if opcao == 1:
         return "2D"
-    else:
-        return "3D"
+    return "3D"
 
-
-# ----------------------------------------------------------------------
-# FUNCOES DE OPERACOES COM VETORES
-# ----------------------------------------------------------------------
 
 def somar_vetores(vetor_a, vetor_b):
-    """Retorna a soma de dois vetores (numpy arrays de mesmo tamanho)."""
     return vetor_a + vetor_b
 
 
 def subtrair_vetores(vetor_a, vetor_b):
-    """Retorna a subtracao (vetor_a - vetor_b)."""
     return vetor_a - vetor_b
 
 
 def multiplicar_escalar(vetor, escalar):
-    """Retorna o vetor multiplicado por um numero escalar."""
     return vetor * escalar
 
 
 def produto_escalar(vetor_a, vetor_b):
-    """Retorna o produto escalar (numero) entre dois vetores."""
     return np.dot(vetor_a, vetor_b)
 
 
 def produto_vetorial(vetor_a, vetor_b):
-    """Retorna o produto vetorial entre dois vetores 3D (outro vetor)."""
+    # so faz sentido pra vetor 3D
     return np.cross(vetor_a, vetor_b)
 
 
-# ----------------------------------------------------------------------
-# FUNCOES DE VISUALIZACAO GRAFICA (MATPLOTLIB)
-# ----------------------------------------------------------------------
-
-# Paleta de cores usada em todos os graficos, para ficar padronizado
-COR_A = "#e63946"          # vermelho
-COR_B = "#2a9d8f"          # verde agua
-COR_RESULTADO = "#264ede"  # azul
-COR_UNICO = "#3a86ff"      # azul (quando so tem 1 vetor no grafico)
+# cores usadas nos graficos, pra ficar sempre igual
+COR_A = "#e63946"
+COR_B = "#2a9d8f"
+COR_RESULTADO = "#264ede"
+COR_UNICO = "#3a86ff"
 COR_FUNDO_FIGURA = "#f7f7fb"
 COR_FUNDO_EIXO = "#ffffff"
 
 
 def calcular_limite(*vetores):
-    """
-    Calcula um limite bom para os eixos do grafico, olhando o maior
-    valor absoluto entre todos os vetores passados. Isso evita que a
-    seta fique cortada ou muito pequena no desenho.
-    """
+    # pega o maior valor entre os vetores pra escala do grafico nao
+    # cortar a seta nem ficar com o desenho muito pequeno
     maior_valor = 1.0
     for vetor in vetores:
         maior_componente = np.max(np.abs(vetor))
@@ -187,7 +135,6 @@ def calcular_limite(*vetores):
 
 
 def estilizar_eixo_2d(eixo, titulo):
-    """Deixa o grafico 2D com um visual mais bonito e organizado."""
     eixo.axhline(0, color="#333333", linewidth=1.2, zorder=1)
     eixo.axvline(0, color="#333333", linewidth=1.2, zorder=1)
     eixo.grid(True, linestyle="--", alpha=0.4, color="#999999")
@@ -200,13 +147,12 @@ def estilizar_eixo_2d(eixo, titulo):
 
 
 def estilizar_eixo_3d(eixo, titulo):
-    """Deixa o grafico 3D com um visual mais bonito e organizado."""
     eixo.set_xlabel("Eixo X", fontsize=11)
     eixo.set_ylabel("Eixo Y", fontsize=11)
     eixo.set_zlabel("Eixo Z", fontsize=11)
     eixo.set_title(titulo, fontsize=14, fontweight="bold", color="#1d3557", pad=14)
     eixo.legend(frameon=True, fontsize=10)
-    # deixa os "painéis" de fundo do 3D mais claros e discretos
+    # fundo mais claro nos paineis do grafico 3D
     eixo.xaxis.pane.set_facecolor("#f0f0f5")
     eixo.yaxis.pane.set_facecolor("#f0f0f5")
     eixo.zaxis.pane.set_facecolor("#f0f0f5")
@@ -214,7 +160,6 @@ def estilizar_eixo_3d(eixo, titulo):
 
 
 def desenhar_seta_2d(eixo, vetor, cor, rotulo):
-    """Desenha uma seta 2D e escreve as coordenadas perto da ponta dela."""
     eixo.quiver(0, 0, vetor[0], vetor[1], angles="xy", scale_units="xy",
                 scale=1, color=cor, label=rotulo, width=0.012,
                 headwidth=4, headlength=5, zorder=3)
@@ -226,7 +171,6 @@ def desenhar_seta_2d(eixo, vetor, cor, rotulo):
 
 
 def desenhar_seta_3d(eixo, vetor, cor, rotulo):
-    """Desenha uma seta 3D com espessura maior para ficar mais visivel."""
     eixo.quiver(0, 0, 0, vetor[0], vetor[1], vetor[2], color=cor,
                 label=rotulo, linewidth=2.5, arrow_length_ratio=0.15)
 
@@ -236,7 +180,6 @@ def desenhar_seta_3d(eixo, vetor, cor, rotulo):
 
 
 def plotar_vetor_2d(vetor, titulo="Vetor 2D"):
-    """Desenha um unico vetor 2D na tela."""
     limite = calcular_limite(vetor)
 
     figura, eixo = plt.subplots(figsize=(6, 6))
@@ -254,7 +197,6 @@ def plotar_vetor_2d(vetor, titulo="Vetor 2D"):
 
 
 def plotar_vetor_3d(vetor, titulo="Vetor 3D"):
-    """Desenha um unico vetor 3D na tela."""
     limite = calcular_limite(vetor)
 
     figura = plt.figure(figsize=(7, 7))
@@ -275,10 +217,6 @@ def plotar_vetor_3d(vetor, titulo="Vetor 3D"):
 
 def plotar_operacao_2d(vetor_a, vetor_b, resultado, titulo, rotulo_a="Vetor A",
                         rotulo_b="Vetor B", rotulo_resultado="Resultado"):
-    """
-    Desenha o Vetor A, o Vetor B e o Resultado da operacao, cada um
-    com uma cor diferente, no plano 2D.
-    """
     limite = calcular_limite(vetor_a, vetor_b, resultado)
 
     figura, eixo = plt.subplots(figsize=(6.5, 6.5))
@@ -298,10 +236,6 @@ def plotar_operacao_2d(vetor_a, vetor_b, resultado, titulo, rotulo_a="Vetor A",
 
 def plotar_operacao_3d(vetor_a, vetor_b, resultado, titulo, rotulo_a="Vetor A",
                         rotulo_b="Vetor B", rotulo_resultado="Resultado"):
-    """
-    Desenha o Vetor A, o Vetor B e o Resultado da operacao, cada um
-    com uma cor diferente, no espaco 3D.
-    """
     limite = calcular_limite(vetor_a, vetor_b, resultado)
 
     figura = plt.figure(figsize=(7.5, 7.5))
@@ -322,7 +256,7 @@ def plotar_operacao_3d(vetor_a, vetor_b, resultado, titulo, rotulo_a="Vetor A",
 
 
 def plotar_operacao_um_vetor_2d(vetor_original, vetor_novo, titulo):
-    """Usado na multiplicacao por escalar em 2D (so tem 2 vetores, nao 3)."""
+    # usado so na multiplicacao por escalar, que tem 2 vetores e nao 3
     limite = calcular_limite(vetor_original, vetor_novo)
 
     figura, eixo = plt.subplots(figsize=(6, 6))
@@ -340,7 +274,6 @@ def plotar_operacao_um_vetor_2d(vetor_original, vetor_novo, titulo):
 
 
 def plotar_operacao_um_vetor_3d(vetor_original, vetor_novo, titulo):
-    """Usado na multiplicacao por escalar em 3D."""
     limite = calcular_limite(vetor_original, vetor_novo)
 
     figura = plt.figure(figsize=(7, 7))
@@ -359,29 +292,20 @@ def plotar_operacao_um_vetor_3d(vetor_original, vetor_novo, titulo):
     plt.show()
 
 
-# ----------------------------------------------------------------------
-# FUNCOES DE CONVERSAO DE UNIDADES
-# ----------------------------------------------------------------------
-
 def mostrar_opcoes(nomes_unidades):
-    """Mostra uma lista numerada de unidades para o usuario escolher."""
     for indice, nome in enumerate(nomes_unidades, start=1):
         print(f"{indice} - {nome}")
 
 
 def escolher_unidade(nomes_unidades):
-    """Pede ao usuario para escolher uma unidade da lista e retorna o nome dela."""
     mostrar_opcoes(nomes_unidades)
     opcao = ler_opcao_inteira("Escolha a unidade: ", 1, len(nomes_unidades))
     return nomes_unidades[opcao - 1]
 
 
 def converter_com_fatores(fatores):
-    """
-    Funcao generica de conversao. Recebe um dicionario com o fator de
-    conversao de cada unidade para a unidade base (fator = quantas
-    unidades base equivalem a 1 unidade daquele tipo).
-    """
+    # fatores = dicionario com quantas unidades "base" equivalem a 1
+    # unidade daquele tipo (ex: 1 km = 1000 m, entao km:1000)
     nomes_unidades = list(fatores.keys())
 
     print("\nUnidade de origem:")
@@ -392,7 +316,6 @@ def converter_com_fatores(fatores):
 
     valor = ler_numero(f"\nDigite o valor em {unidade_origem}: ")
 
-    # converte o valor para a unidade base e depois para a unidade destino
     valor_em_base = valor * fatores[unidade_origem]
     valor_convertido = valor_em_base / fatores[unidade_destino]
 
@@ -465,10 +388,8 @@ def converter_forca():
 
 
 def converter_temperatura():
-    """
-    Temperatura nao pode usar fator fixo (nao e uma conversao linear
-    que passa pela origem), entao fazemos formulas separadas.
-    """
+    # temperatura nao da pra converter so multiplicando por um fator
+    # (a escala nao comeca do zero igual as outras), entao faz na mao
     unidades = ["Celsius", "Fahrenheit", "Kelvin"]
 
     print("\nUnidade de origem:")
@@ -478,27 +399,26 @@ def converter_temperatura():
 
     valor = ler_numero(f"\nDigite o valor em {origem}: ")
 
-    # primeiro converte para Celsius
+    # passa tudo pra Celsius primeiro
     if origem == "Celsius":
         celsius = valor
     elif origem == "Fahrenheit":
         celsius = (valor - 32) * 5.0 / 9.0
-    else:  # Kelvin
+    else:
         celsius = valor - 273.15
 
-    # depois converte de Celsius para a unidade de destino
+    # dai converte de Celsius pra unidade final
     if destino == "Celsius":
         resultado = celsius
     elif destino == "Fahrenheit":
         resultado = celsius * 9.0 / 5.0 + 32
-    else:  # Kelvin
+    else:
         resultado = celsius + 273.15
 
     print(f"\nResultado: {valor} {origem} = {resultado:.4f} {destino}\n")
 
 
 def converter_unidades():
-    """Menu de conversao de unidades. Chama a funcao especifica de cada categoria."""
     print("\n==============================")
     print("CONVERSAO DE UNIDADES")
     print("==============================")
@@ -528,27 +448,18 @@ def converter_unidades():
         converter_forca()
 
 
-# ----------------------------------------------------------------------
-# FUNCOES QUE EXECUTAM AS OPCOES DO MENU DE VETORES
-# ----------------------------------------------------------------------
-
 def opcao_criar_vetor_2d():
-    """Apenas cria e mostra um vetor 2D (sem guardar em variavel global)."""
     vetor = ler_vetor_2d()
     print(f"Vetor 2D criado com sucesso: {vetor}\n")
 
 
 def opcao_criar_vetor_3d():
-    """Apenas cria e mostra um vetor 3D (sem guardar em variavel global)."""
     vetor = ler_vetor_3d()
     print(f"Vetor 3D criado com sucesso: {vetor}\n")
 
 
 def registrar_operacao(tipo, dimensao, vetor_a, vetor_b, resultado, escalar=None):
-    """
-    Guarda os dados da ultima operacao feita nas variaveis globais,
-    para que a opcao 'Visualizar operacao' consiga desenhar depois.
-    """
+    # salva a ultima operacao pra opcao "visualizar operacao" usar depois
     global ultima_operacao_tipo, ultima_operacao_dimensao
     global ultimo_vetor_a, ultimo_vetor_b, ultimo_resultado, ultimo_escalar
 
@@ -571,7 +482,6 @@ def opcao_somar_vetores():
     vetor_b = ler_vetor_2d() if dimensao == "2D" else ler_vetor_3d()
 
     resultado = somar_vetores(vetor_a, vetor_b)
-
     print(f"\nA + B = {resultado}\n")
 
     registrar_operacao("soma", dimensao, vetor_a, vetor_b, resultado)
@@ -588,7 +498,6 @@ def opcao_subtrair_vetores():
     vetor_b = ler_vetor_2d() if dimensao == "2D" else ler_vetor_3d()
 
     resultado = subtrair_vetores(vetor_a, vetor_b)
-
     print(f"\nA - B = {resultado}\n")
 
     registrar_operacao("subtracao", dimensao, vetor_a, vetor_b, resultado)
@@ -602,13 +511,10 @@ def opcao_multiplicar_escalar():
     vetor = ler_vetor_2d() if dimensao == "2D" else ler_vetor_3d()
 
     escalar = ler_numero("Digite o escalar: ")
-
     resultado = multiplicar_escalar(vetor, escalar)
-
     print(f"\nVetor x {escalar} = {resultado}\n")
 
-    # aqui nao existe "vetor B", entao guardamos o proprio vetor no lugar
-    # e o escalar, para a visualizacao saber o que desenhar depois
+    # nao tem "vetor B" aqui, entao guarda o vetor original + o escalar
     registrar_operacao("escalar", dimensao, vetor, None, resultado, escalar)
 
 
@@ -623,12 +529,9 @@ def opcao_produto_escalar():
     vetor_b = ler_vetor_2d() if dimensao == "2D" else ler_vetor_3d()
 
     resultado = produto_escalar(vetor_a, vetor_b)
-
     print(f"\nProduto escalar A . B = {resultado}\n")
     print("Obs: o produto escalar e um numero, entao nao ha grafico para ele.\n")
-
-    # nao registramos como "ultima operacao" porque nao da pra desenhar
-    # um numero como vetor
+    # nao registra como ultima operacao pq nao da pra desenhar um numero
 
 
 def opcao_produto_vetorial():
@@ -642,7 +545,6 @@ def opcao_produto_vetorial():
     vetor_b = ler_vetor_3d()
 
     resultado = produto_vetorial(vetor_a, vetor_b)
-
     print(f"\nA x B = {resultado}\n")
 
     registrar_operacao("vetorial", "3D", vetor_a, vetor_b, resultado)
@@ -665,7 +567,7 @@ def opcao_visualizar_operacao():
 
     if ultima_operacao_tipo is None:
         print("Nenhuma operacao foi feita ainda. Faca uma operacao antes de "
-              "visualizar (opcoes 4 a 8 do menu).\n")
+              "visualizar (opcoes 3 a 7 do menu de vetores).\n")
         return
 
     tipo = ultima_operacao_tipo
@@ -700,10 +602,6 @@ def opcao_visualizar_operacao():
         plotar_operacao_3d(vetor_a, vetor_b, resultado, titulo)
 
 
-# ----------------------------------------------------------------------
-# MENU PRINCIPAL E MENU DE VETORES
-# ----------------------------------------------------------------------
-
 def mostrar_menu_principal():
     print("\n==============================")
     print("PROJETO 1 - VETORES")
@@ -730,7 +628,6 @@ def mostrar_menu_vetores():
 
 
 def menu_vetores():
-    """Fica em loop no submenu de vetores ate o usuario escolher voltar (0)."""
     while True:
         mostrar_menu_vetores()
         opcao = ler_opcao_inteira("\nEscolha uma opcao: ", 0, 9)
@@ -772,10 +669,6 @@ def main():
         elif opcao == 2:
             menu_vetores()
 
-
-# ----------------------------------------------------------------------
-# PONTO DE ENTRADA DO PROGRAMA
-# ----------------------------------------------------------------------
 
 if __name__ == "__main__":
     main()

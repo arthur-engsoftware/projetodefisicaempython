@@ -6,7 +6,7 @@ Repositorio: https://github.com/arthur-engsoftware/projetodefisicaempython
 
 ---
 
-## Como executar (Linux) — jeito mais facil
+## Como executar (Linux) — 
 
 Abra o terminal dentro da pasta do projeto e rode:
 
