@@ -16,9 +16,31 @@ Para rodar:
     python3 projeto_vetores.py
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D  # necessario para graficos 3D
+import sys
+
+# Tenta importar as bibliotecas necessarias. Se alguma nao estiver
+# instalada, mostra uma mensagem simples explicando o que fazer, em vez
+# de um erro tecnico (Traceback) dificil de entender.
+try:
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.mplot3d import Axes3D  # necessario para graficos 3D
+except ModuleNotFoundError as erro:
+    print("=" * 60)
+    print("ERRO: uma biblioteca necessaria nao esta instalada.")
+    print(f"Detalhe: {erro}")
+    print()
+    print("Para corrigir, rode este comando no terminal, dentro da")
+    print("pasta do projeto, e depois execute o programa novamente:")
+    print()
+    print("    pip3 install -r requirements.txt")
+    print()
+    print("Se aparecer erro dizendo 'externally-managed-environment',")
+    print("rode este comando em vez do de cima:")
+    print()
+    print("    pip3 install -r requirements.txt --break-system-packages")
+    print("=" * 60)
+    sys.exit(1)
 
 
 # ----------------------------------------------------------------------
